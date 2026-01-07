@@ -17,8 +17,10 @@ jobs:
 
       - name: Build image
         run: |
-          docker build \
-            -t ghcr.io/${{ github.repository }}:qa .
+          IMAGE=ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]'):qa
+          docker build -t $IMAGE .
 
       - name: Push image
-        run: docker push ghcr.io/${{ github.repository }}:qa
+        run: |
+          IMAGE=ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]'):qa
+          docker push $IMAGE
