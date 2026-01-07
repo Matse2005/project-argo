@@ -1,0 +1,11 @@
+{
+  "name": "ci-k8s-demo",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node src/app.js",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0"
+  }
+}
