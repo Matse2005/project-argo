@@ -3,7 +3,7 @@ const http = require("http");
 const server = http.createServer((req, res) => {
   const env = process.env.ENV || "unknown";
   res.writeHead(200);
-  res.end(`Hello from ${env} environment\n`);
+  res.end(`Hello from ${env}\n`);
 });
 
 if (require.main === module) {
