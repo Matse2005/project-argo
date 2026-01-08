@@ -1,4 +1,4 @@
-name: Build & Push DEV
+name: Build & Push QA
 
 on:
   push:
