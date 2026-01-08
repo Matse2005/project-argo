@@ -25,7 +25,9 @@ test("returns environment in response", (done) => {
 
     res.on("end", () => {
       expect(res.statusCode).toBe(200);
-      expect(data).toBe("Hello from test automated environment\n");
+      expect(data).toBe(
+        "Hello from test automated environment updated with keel\n"
+      );
       done();
     });
   });
