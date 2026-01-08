@@ -3,7 +3,8 @@ const { execSync } = require("child_process");
 
 const timestamp = new Date().toISOString();
 const appFile = "src/app.js";
-const testFile = "test/app.test.js"; // adjust if your test path is different
+const testFile = "test/app.test.js"; // adjust if needed
+const branches = ["main", "dev", "qa", "rollout"];
 
 // Replace timestamp in a file
 function updateFile(file) {
@@ -13,7 +14,6 @@ function updateFile(file) {
   }
 
   let content = fs.readFileSync(file, "utf-8");
-  // Matches any ISO timestamp inside double quotes
   content = content.replace(
     /"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z"/,
     `"${timestamp}"`
@@ -22,29 +22,17 @@ function updateFile(file) {
   console.log(`Updated timestamp in ${file}`);
 }
 
-// Update both files
-updateFile(appFile);
-updateFile(testFile);
-
-// Commit & push to multiple branches
-const branches = ["main", "dev", "qa", "rollout"];
-
 branches.forEach((branch) => {
   try {
-    // Make sure we don't have uncommitted changes blocking the checkout
-    execSync("git add -A");
-    execSync(
-      `git commit -m "Auto-update timestamp to ${timestamp}" || echo "Nothing to commit"`
-    );
-
-    // Checkout branch and pull latest
+    // Checkout branch
     execSync(`git checkout ${branch}`);
     execSync("git pull");
 
-    // Apply changes again (in case different branches have different content)
+    // Update files
     updateFile(appFile);
     updateFile(testFile);
 
+    // Commit & push
     execSync("git add -A");
     execSync(
       `git commit -m "Auto-update timestamp to ${timestamp}" || echo "Nothing to commit"`
@@ -57,4 +45,4 @@ branches.forEach((branch) => {
   }
 });
 
-console.log("All done. Timestamp:", timestamp);
+console.log("All branches updated. Timestamp:", timestamp);

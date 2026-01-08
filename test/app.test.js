@@ -15,7 +15,7 @@ afterAll((done) => {
 
 test("returns environment and timestamp in response", (done) => {
   const port = listener.address().port;
-  const timestamp = "2026-01-08T13:44:49.322Z"; // <— same timestamp as in app.js
+  const timestamp = "2026-01-08T13:45:54.540Z"; // <— same timestamp as in app.js
 
   http.get(`http://localhost:${port}`, (res) => {
     let data = "";
