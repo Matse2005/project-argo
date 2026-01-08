@@ -2,8 +2,9 @@ const http = require("http");
 
 const server = http.createServer((req, res) => {
   const env = process.env.ENV || "unknown";
+  const timestamp = "2026-01-08T13:42:09.888Z"; // <— this will be updated by script
   res.writeHead(200);
-  res.end(`Hello from ${env} automated environment updated with keel\n`);
+  res.end(`Hello from ${env} - ${timestamp}\n`);
 });
 
 if (require.main === module) {
