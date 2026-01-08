@@ -3,7 +3,7 @@ const { execSync } = require("child_process");
 
 const timestamp = new Date().toISOString();
 const appFile = "src/app.js";
-const testFile = "test/app.test.js"; // adjust path if different
+const testFile = "test/app.test.js"; // adjust if needed
 const branches = ["main", "dev", "qa", "rollout"];
 
 // Replace timestamp in a file
@@ -24,10 +24,7 @@ function updateFile(file) {
 
 branches.forEach((branch) => {
   try {
-    // Stash any uncommitted changes to avoid conflicts
-    execSync("git stash --include-untracked");
-
-    // Checkout the branch
+    // Checkout branch
     execSync(`git checkout ${branch}`);
     execSync("git pull");
 
@@ -43,10 +40,6 @@ branches.forEach((branch) => {
     execSync(`git push origin ${branch}`);
 
     console.log(`✅ Updated and pushed branch ${branch}`);
-
-    // Return to previous branch and apply stashed changes
-    execSync("git checkout -");
-    execSync("git stash pop || echo 'No stashed changes to apply'");
   } catch (err) {
     console.error(`❌ Failed on branch ${branch}:`, err.message);
   }

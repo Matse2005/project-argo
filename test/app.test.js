@@ -13,8 +13,9 @@ afterAll((done) => {
   listener.close(done);
 });
 
-test("returns environment in response", (done) => {
+test("returns environment and timestamp in response", (done) => {
   const port = listener.address().port;
+  const timestamp = "2026-01-08T13:46:01.471Z"; // <— same timestamp as in app.js
 
   http.get(`http://localhost:${port}`, (res) => {
     let data = "";
@@ -25,7 +26,7 @@ test("returns environment in response", (done) => {
 
     res.on("end", () => {
       expect(res.statusCode).toBe(200);
-      expect(data).toBe("Hello from test automated environment\n");
+      expect(data).toBe(`Hello from test - ${timestamp}\n`);
       done();
     });
   });
