@@ -1,4 +1,4 @@
-name: Build & Push DEV
+name: Build & Push MAIN
 
 on:
   push:
