@@ -1,47 +1,28 @@
-name: Update Timestamp
+name: Run Publish Script
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # allows manual trigger
+  schedule:
+    - cron: '0 * * * *' # optional: run hourly
 
 jobs:
-  update-timestamp:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}  # still needed to checkout
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 22
 
-      - name: Configure Git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Update timestamp in all branches
-        run: |
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          echo "Timestamp: $TIMESTAMP"
-
-          BRANCHES=("main" "dev" "qa" "rollout")
-
-          for BRANCH in "${BRANCHES[@]}"; do
-            git checkout $BRANCH
-            git pull
-
-            sed -i -E "s/\"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z\"/\"$TIMESTAMP\"/" src/app.js
-
-            if [ -f tests/app.test.js ]; then
-              sed -i -E "s/\"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z\"/\"$TIMESTAMP\"/" tests/app.test.js
-            fi
-
-            git add -A
-            git commit -m "Auto-update timestamp to $TIMESTAMP" || echo "Nothing to commit"
-            git push origin $BRANCH
-          done
+      - name: Run publish script
+        run: npm run publish
