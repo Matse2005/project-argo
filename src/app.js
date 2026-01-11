@@ -2,7 +2,7 @@ const http = require("http");
 
 const server = http.createServer((req, res) => {
   const env = process.env.ENV || "unknown";
-  const timestamp = "2026-01-08T14:26:01.620Z"; // <— this will be updated by script
+  const timestamp = "2026-01-11T18:31:51.800Z"; // <— this will be updated by script
   res.writeHead(200);
   res.end(`Hello from ${env} - ${timestamp}\n`);
 });
